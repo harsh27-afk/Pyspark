@@ -9,7 +9,7 @@
 - i think we need : pip install pyspark (not sure though , if we installed pyspark s/w we dont need : pip install pyspark ig )
 
 
-- For practicing the u can use : 
+- For practicing u can use : 
 1) ide with git (used in prod)
 2) databricks notebook
 3) pyspark shell (best for practicing)
