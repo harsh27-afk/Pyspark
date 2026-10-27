@@ -261,10 +261,173 @@ df = spark.read \
     .csv("data/users_pipe_separated.txt")
 ```
 
+- if the seperator/delimiter is tabs the use "/t"   
+
+
+
+---------------------------------------------------------------------------------------------
+
+
+### 6) Creating DF from a json file :
+
+```python
+
+# std import and creating a spark session  
+
+# Read the movie data from a JSON file into a DataFrame
+# Replace '<path to movies.json>' with the actual path to your JSON file
+moviesDF = spark.read.option("inferSchema", "true").json("data/movies.json")
+
+# Print the schema of the DataFrame to show the inferred data types and structure
+moviesDF.printSchema()
+
+# Display the contents of the DataFrame to provide insight into the movie data
+moviesDF.show()
+## proper table will be shown 
+
+# Stop the Spark session
+spark.stop()
+
+
+```
+
+**If a field is missing in the json file then NULL will be shown in the dataframe !! **
+
+
+-----------------------------------------------------------------------------------------------
+
+### 7) Creating DF from a NESTED json file 
+
+```json
+[
+  {
+    "id": 1,
+    "name": "John",
+    "address": {
+      "city": "New York",
+      "state": "NY"
+    },
+    "phone_numbers": [
+      {
+        "type": "home",
+        "number": "123-456-7890"
+      },
+      {
+        "type": "work",
+        "number": "987-654-3210"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Jane",
+    "address": {
+      "city": "San Francisco",
+      "state": "CA"
+    },
+    "phone_numbers": [
+      {
+        "type": "home",
+        "number": "111-222-3333"
+      },
+      {
+        "type": "work",
+        "number": "444-555-6666"
+      }
+    ]
+  }
+]
+
+```
+
+code :
+
+```python
+# Reading a JSON file with nested data, the option "multiLine" set to True allows reading multi-line JSON files
+df = spark.read.option("multiLine", "true").json(r"data/nested_json.json")
+
+
+# Printing the schema of the DataFrame to understand the structure of the nested JSON data
+df.printSchema()
+
+address : struct type
+phone no. : array type
+
+
+# Displaying the contents of the DataFrame in a tabular format
+df.show()
+
+| address              | id | name | phone_numbers          |
+|----------------------|----|------|------------------------|
+| {New York, NY}       | 1  | John | [{123-456-7890, h...   |
+| {San Francisco, CA}  | 2  | Jane | [{111-222-3333, h...   |
+
+see nested wale k column names are not shown directly values !!!
+
+
+# Stopping the SparkSession
+spark.stop()
+```
+
+
+-------------------------------------------------------------------------------------------------
+
+
+### 8) Extracting schema from a dataframe :
+
+```python 
+
+movie_schema = df.schema 
+
+
+StructType([StructField('address', StructType([StructField('city', StringType(), True), StructField('state', StringType(), True)]), True), StructField('id', LongType(), True), StructField('name', StringType(), True), StructField('phone_numbers', ArrayType(StructType([StructField('number', StringType(), True), StructField('type', StringType(), True)]), True), True)])
+
+
+```
+
+#### Q) if u have 150 cols and u wanna create df will u be manually writing the schema by yourself and waste time ?
+ Ans : No, create a sample file of 150 col , u trust this file as u have validated about data type and all, now just simply extract the schema from df.schema method and then use it to create actual dataframe !!
+
+
+--------------------------------------------------------------------------------------------------
+
+
+### 9) Creating DF from a XML file :
+
+- need a seperate package to be installed 
+- pyspark --packages com.databricks:spark-xml_2.12...
+
+```xml
+<people>
+  <person>
+    <id>1</id>
+    <name>John</name>
+    <city>New York</city>
+  </person>
+  <person>
+    <id>2</id>
+    <name>Jane</name>
+    <city>San Francisco</city>
+  </person>
+</people>
+
+person is the row level
+```
+
+
+
+```
+df = spark.read.format("xml").option()...load(r"")
+```
 
 
 
 
+------------------------------------------------------------
 
+## Interview questions pending : 
 
+- multiple delimiter and mult character delimiter 
+
+- json handling also remaining
 
