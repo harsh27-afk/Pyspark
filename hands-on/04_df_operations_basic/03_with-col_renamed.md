@@ -1,4 +1,4 @@
-###
+### .withColumnRenamed("old_col_name", "new_name")
 
 
 - Rename the col name from dept TO department and date_of_joining to DOJ
